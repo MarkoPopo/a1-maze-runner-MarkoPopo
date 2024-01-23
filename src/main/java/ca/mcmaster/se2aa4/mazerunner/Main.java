@@ -13,10 +13,18 @@ public class Main {
 
     public static void main(String[] args) {
 
+        String file = args[0];
+        for(int i=0;i<args.length;i++){
+            if((args[i].equals("-i"))||(args[i].equals("--input"))){
+                file = args[i+1];
+                break;
+            }
+        }
+
         logger.info("** Starting Maze runner");
         try {
-            logger.info("**** Reading the maze from file " + args[0]);
-            BufferedReader reader = new BufferedReader(new FileReader(args[0]));
+            logger.info("**** Reading the maze from file " + file);
+            BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
             while ((line = reader.readLine()) != null) {
                 for (int idx = 0; idx < line.length(); idx++) {
