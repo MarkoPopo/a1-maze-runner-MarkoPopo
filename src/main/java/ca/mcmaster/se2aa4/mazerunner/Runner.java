@@ -53,6 +53,7 @@ public class Runner {
     private static String factorize(String path){
         return "";
     }
+
     private String decideMove(String previousMove){
         if(wallCheck(moves.R)){ //Wall to your right
             if(wallCheck(moves.F)){ //Wall in front
@@ -72,6 +73,7 @@ public class Runner {
             }
         }
     }
+  
     private boolean wallCheck(moves move){
         int[] movement = calculateDirection(move);
         int[] newCoords = {0,0};
