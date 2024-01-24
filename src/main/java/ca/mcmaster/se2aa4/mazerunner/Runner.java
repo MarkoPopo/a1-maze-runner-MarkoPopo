@@ -54,6 +54,7 @@ public class Runner {
     private static String factorize(String path){
         return "";
     }
+
     private String decideMove(String previousMove){
         if(wallCheck(moves.R)){ //Wall to your right
             if(wallCheck(moves.F)){ //Wall in front
@@ -73,8 +74,25 @@ public class Runner {
             }
         }
     }
+
+    private void move(){
+        int[] movement = dirInt(calculateDirection(moves.F));
+        int[] newCoords = {0,0};
+        newCoords[0] = coordinates[0] + movement[0];
+        newCoords[1] = coordinates[1] + movement[1];
+
+        coordinates = newCoords;
+    }
+
+    private void rotate(String directionStr){
+        if(directionStr.equals("R")){
+            facingDirection = calculateDirection(moves.R);
+        }else if(directionStr.equals("L")){
+            facingDirection = calculateDirection(moves.L);
+        }
+    }
     private boolean wallCheck(moves move){
-        int[] movement = calculateDirection(move);
+        int[] movement = dirInt(calculateDirection(move));
         int[] newCoords = {0,0};
         newCoords[0] = coordinates[0] + movement[0];
         newCoords[1] = coordinates[1] + movement[1];
@@ -83,7 +101,7 @@ public class Runner {
         return maze2D.get(newCoords[1]).get(newCoords[0]).equals('#');
     }
 
-    private int[] calculateDirection(moves move){
+    private dir calculateDirection(moves move){
         dir direction = facingDirection;
         int[] dirInt = {0,0};
         if(move == moves.R){
@@ -113,6 +131,10 @@ public class Runner {
                     log.error("invalid direction L");
             }
         }
+        return direction;
+    }
+    private int[] dirInt(dir direction){
+        int[] dirInt = {0,0};
         switch(direction){
             case North:
                 dirInt[1] = -1;
