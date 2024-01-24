@@ -10,6 +10,8 @@ public class Main {
     //java -jar target/mazerunner.jar ./examples/small.maz.txt
     private static final Logger log = LogManager.getLogger();
 
+    static Maze maze = new Maze();
+
     public static void main(String[] args) throws IOException {
         
         enum Mode {
@@ -34,9 +36,9 @@ public class Main {
 
         //Choose what to do based on mode
         if(currentMode == Mode.Solve){
-            Maze.run(file);
+            maze.run(file);
         }else{
-            Maze.checkPath(file,path);
+            maze.checkPath(file,path);
         }
     }
 }
