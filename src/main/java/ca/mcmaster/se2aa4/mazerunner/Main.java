@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Main {
     //mvn clean package
-    //java -jar target/mazerunner.jar ./examples/direct.maz.txt
+    //java -jar target/mazerunner.jar ./examples/giant.maz.txt
     private static final Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) throws IOException {
@@ -19,6 +19,8 @@ public class Main {
         String file = args[0];
         String mode = "explore";
         String path = "";
+
+        logger.info("mvp");
 
         for(int i=0;i<args.length;i++){
             if((args[i].equals("-i"))||(args[i].equals("--input"))){
