@@ -54,6 +54,16 @@ public class Runner {
     private static String factorize(String path){
         return "";
     }
+  
+    private boolean wallCheck(moves move){
+        int[] movement = calculateDirection(move);
+        int[] newCoords = {0,0};
+        newCoords[0] = coordinates[0] + movement[0];
+        newCoords[1] = coordinates[1] + movement[1];
+
+        //Return if the viewed location is a wall
+        return maze2D.get(newCoords[1]).get(newCoords[0]).equals('#');
+    }
     private int[] calculateDirection(moves move){
         dir direction = facingDirection;
         int[] dirInt = {0,0};
