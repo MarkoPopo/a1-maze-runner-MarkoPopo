@@ -12,6 +12,8 @@ import org.apache.logging.log4j.Logger;
 
 public class Maze {
 
+    Runner runner = new Runner();
+
     public static List<List<Character>> rowsList = new ArrayList<List<Character>>();  
     
     private static void build(String file) throws IOException{
@@ -50,12 +52,13 @@ public class Maze {
         }
     }
 
-    public static void checkPath(String file, String path) throws IOException {
+    public void checkPath(String file, String path) throws IOException {
         build(file);
+        runner.pathVerify(rowsList, path);
     }
 
-    public static void run(String file) throws IOException {
+    public void run(String file) throws IOException {
         build(file);
-        Runner.explore(rowsList);
+        runner.explore(rowsList);
     }
 }
