@@ -40,7 +40,6 @@ public class Runner {
                 coordinates[1] = i;
             }
         }
-        
     }
 
     public void pathVerify(List<List<Character>> rowsList, String path) {
@@ -54,6 +53,26 @@ public class Runner {
     private static String factorize(String path){
         return "";
     }
+
+    private String decideMove(String previousMove){
+        if(wallCheck(moves.R)){ //Wall to your right
+            if(wallCheck(moves.F)){ //Wall in front
+                return "L";
+            }else{//No wall in front
+                return "F";
+            }
+        }else{//No wall
+            if(wallCheck(moves.F)){//Wall in front
+                return "R";
+            }else{//No wall in front
+                if(previousMove.equals("R")){//we just turned right
+                    return "F";
+                }else{//we came to a right corner
+                    return "R";
+                }
+            }
+        }
+    }
   
     private boolean wallCheck(moves move){
         int[] movement = calculateDirection(move);
@@ -64,6 +83,7 @@ public class Runner {
         //Return if the viewed location is a wall
         return maze2D.get(newCoords[1]).get(newCoords[0]).equals('#');
     }
+
     private int[] calculateDirection(moves move){
         dir direction = facingDirection;
         int[] dirInt = {0,0};
