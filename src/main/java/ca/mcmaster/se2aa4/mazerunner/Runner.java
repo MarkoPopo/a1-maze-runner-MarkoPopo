@@ -33,7 +33,7 @@ public class Runner {
         int exitCoord = rowsList.get(0).size();
 
         log.info("Exploring Maze");
-        
+
         log.info("Looking for West entrance");
         for(int i = 0;i<rowsList.size();i++){
             if (rowsList.get(i).get(0).equals(' ')){
@@ -53,5 +53,49 @@ public class Runner {
     }
     private static String factorize(String path){
         return "";
+    }
+    private int[] calculateDirection(moves move){
+        dir direction = facingDirection;
+        int[] dirInt = {0,0};
+        if(move == moves.R){
+            switch(direction){
+                case North:
+                    direction = dir.East;
+                case West:
+                    direction = dir.North;
+                case South:
+                    direction = dir.West;
+                case East:
+                    direction = dir.South;
+                default:
+                    log.error("invalid direction R");
+            }
+        }else if(move == moves.L){
+            switch(direction){
+                case North:
+                    direction = dir.West;
+                case West:
+                    direction = dir.South;
+                case South:
+                    direction = dir.East;
+                case East:
+                    direction = dir.North;
+                default:
+                    log.error("invalid direction L");
+            }
+        }
+        switch(direction){
+            case North:
+                dirInt[1] = -1;
+            case West:
+                dirInt[0] = -1;
+            case South:
+                dirInt[1] = 1;
+            case East:
+                dirInt[0] = 1;
+            default:
+                log.error("invalid direction int[]");
+        }
+        return dirInt;
     }
 }
