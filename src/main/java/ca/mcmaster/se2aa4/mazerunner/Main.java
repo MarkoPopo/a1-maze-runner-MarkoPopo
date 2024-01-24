@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Main {
     //mvn clean package
-    //java -jar target/mazerunner.jar ./examples/small.maz.txt
+    //java -jar target/mazerunner.jar ./examples/direct.maz.txt
     private static final Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) throws IOException {
