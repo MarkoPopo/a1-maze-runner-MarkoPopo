@@ -29,7 +29,7 @@ public class Runner {
 
     public void explore(List<List<Character>> rowsList) {
         maze2D = rowsList;
-        String pathTaken = "4F";
+        String pathTaken = "";
         int exitCoord = rowsList.get(0).size();
 
         log.info("Exploring Maze");
@@ -38,7 +38,40 @@ public class Runner {
         for(int i = 0;i<rowsList.size();i++){
             if (rowsList.get(i).get(0).equals(' ')){
                 coordinates[1] = i;
+                log.info("Found entrance at y = "+i);
             }
+        }
+        String previousMove = "";
+        while(coordinates[0] != exitCoord){
+            try {
+                String newMove = decideMove(previousMove);
+
+            previousMove = newMove;
+            pathTaken += newMove;
+            switch(newMove){
+                case "F":
+                    move();
+                    log.info("Moved Forward");
+                    break;
+                case "L":
+                    rotate(moves.L);
+                    log.info("Rotated Left");
+                    break;
+                case "R":
+                    rotate(moves.R);
+                    log.info("Rotated Right");
+                    break;
+                default:
+                    log.info("Impossible move");
+                    break;
+            }
+            log.info(coordinates[0]+" "+coordinates[1]);
+            log.info(facingDirection);
+            } catch (Exception e) {
+                log.error("Left Maze!");
+                break;
+            }
+            
         }
         log.info(pathTaken);
     }
@@ -62,11 +95,12 @@ public class Runner {
             }else{//No wall in front
                 return "F";
             }
-        }else{//No wall
+        }else{//No wall on right
+            log.error("no wall on right");
             if(wallCheck(moves.F)){//Wall in front
                 return "R";
             }else{//No wall in front
-                if(previousMove.equals("R")){//we just turned right
+                if(previousMove.equals("R")||previousMove.equals("")){//we just turned right or just started
                     return "F";
                 }else{//we came to a right corner
                     return "R";
@@ -84,13 +118,10 @@ public class Runner {
         coordinates = newCoords;
     }
 
-    private void rotate(String directionStr){
-        if(directionStr.equals("R")){
-            facingDirection = calculateDirection(moves.R);
-        }else if(directionStr.equals("L")){
-            facingDirection = calculateDirection(moves.L);
-        }
+    private void rotate(moves move){
+        facingDirection = calculateDirection(move);
     }
+
     private boolean wallCheck(moves move){
         int[] movement = dirInt(calculateDirection(move));
         int[] newCoords = {0,0};
@@ -103,32 +134,41 @@ public class Runner {
 
     private dir calculateDirection(moves move){
         dir direction = facingDirection;
-        int[] dirInt = {0,0};
         if(move == moves.R){
             switch(direction){
                 case North:
                     direction = dir.East;
+                    break;
                 case West:
                     direction = dir.North;
+                    break;
                 case South:
                     direction = dir.West;
+                    break;
                 case East:
                     direction = dir.South;
+                    break;
                 default:
                     log.error("invalid direction R");
+                    break;
             }
         }else if(move == moves.L){
             switch(direction){
                 case North:
                     direction = dir.West;
+                    break;
                 case West:
                     direction = dir.South;
+                    break;
                 case South:
                     direction = dir.East;
+                    break;
                 case East:
                     direction = dir.North;
+                    break;
                 default:
                     log.error("invalid direction L");
+                    break;
             }
         }
         return direction;
@@ -138,14 +178,19 @@ public class Runner {
         switch(direction){
             case North:
                 dirInt[1] = -1;
+                break;
             case West:
                 dirInt[0] = -1;
+                break;
             case South:
                 dirInt[1] = 1;
+                break;
             case East:
                 dirInt[0] = 1;
+                break;
             default:
                 log.error("invalid direction int[]");
+                break;
         }
         return dirInt;
     }

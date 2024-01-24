@@ -15,6 +15,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
+        logger.info("** Starting Maze runner");
+        
         Maze maze = new Maze();
         String file = args[0];
         String mode = "explore";
@@ -35,9 +37,5 @@ public class Main {
         }else{
             maze.checkPath(file, path);
         }
-
-
-        logger.info("** Starting Maze runner");
-        
     }
 }
