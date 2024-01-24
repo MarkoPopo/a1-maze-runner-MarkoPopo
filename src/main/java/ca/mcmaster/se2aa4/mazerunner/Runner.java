@@ -54,7 +54,7 @@ public class Runner {
     private static String factorize(String path){
         return "";
     }
-
+  
     private boolean wallCheck(moves move){
         int[] movement = calculateDirection(move);
         int[] newCoords = {0,0};
