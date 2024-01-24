@@ -3,6 +3,8 @@ package ca.mcmaster.se2aa4.mazerunner;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,36 +13,31 @@ public class Main {
     //java -jar target/mazerunner.jar ./examples/small.maz.txt
     private static final Logger logger = LogManager.getLogger();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
+        Maze maze = new Maze();
         String file = args[0];
+        String mode = "explore";
+        String path = "";
+
         for(int i=0;i<args.length;i++){
             if((args[i].equals("-i"))||(args[i].equals("--input"))){
                 file = args[i+1];
                 break;
+            }else if(args[i].equals("-p")){
+                mode = "verify";
+                path = args[i+1];
             }
         }
 
-        logger.info("** Starting Maze runner");
-        try {
-            logger.info("**** Reading the maze from file " + file);
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                for (int idx = 0; idx < line.length(); idx++) {
-                    if (line.charAt(idx) == '#') {
-                        logger.info("WALL ");
-                    } else if (line.charAt(idx) == ' ') {
-                        logger.info("PASS ");
-                    }
-                }
-                System.out.print(System.lineSeparator());
-            }
-        } catch(Exception e) {
-            logger.error("/!\\ An error has occured /!\\");
+        if(mode.equals("explore")){
+            maze.explorePath(file);
+        }else{
+            maze.checkPath(file, path);
         }
-        logger.info("**** Computing path");
-        logger.info("PATH NOT COMPUTED");
-        logger.info("** End of MazeRunner");
+
+
+        logger.info("** Starting Maze runner");
+        
     }
 }
