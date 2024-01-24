@@ -29,7 +29,7 @@ public class Runner {
 
     public void explore(List<List<Character>> rowsList) {
         maze2D = rowsList;
-        String pathTaken = "";
+        String pathTaken = "4F";
         int exitCoord = rowsList.get(0).size();
 
         log.info("Exploring Maze");
@@ -40,6 +40,7 @@ public class Runner {
                 coordinates[1] = i;
             }
         }
+        log.info(pathTaken);
     }
 
     public void pathVerify(List<List<Character>> rowsList, String path) {
@@ -53,7 +54,6 @@ public class Runner {
     private static String factorize(String path){
         return "";
     }
-
     private String decideMove(String previousMove){
         if(wallCheck(moves.R)){ //Wall to your right
             if(wallCheck(moves.F)){ //Wall in front
@@ -73,7 +73,6 @@ public class Runner {
             }
         }
     }
-  
     private boolean wallCheck(moves move){
         int[] movement = calculateDirection(move);
         int[] newCoords = {0,0};

@@ -57,7 +57,7 @@ public class Maze {
         runner.pathVerify(rowsList, path);
     }
 
-    public void run(String file) throws IOException {
+    public void explorePath(String file) throws IOException {
         build(file);
         runner.explore(rowsList);
     }
