@@ -5,11 +5,13 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Runner {
 
     int[] coordinates = {0,0};
+    int[] exitCoord ={0,0};
     dir facingDirection = dir.East;
 
     public Maze maze2D = new Maze();
@@ -30,15 +32,16 @@ public class Runner {
 
     public void explore(String file) throws IOException {
         
-        maze2D.build(file);
-        maze2D.debugprintMaze();
-        String pathTaken = "";
-        coordinates = maze2D.returnWestEntrance();
-        int[] exitCoord = maze2D.returnEastEntrance();
-
         log.info("Exploring Maze");
 
+        maze2D.build(file);
+        
+        coordinates = maze2D.returnWestEntrance();
+        exitCoord = maze2D.returnEastEntrance();
+
+        String pathTaken = "";
         String previousMove = "";
+
         while(coordinates != exitCoord){
             try {
                 String newMove = decideMove(previousMove);
@@ -75,10 +78,51 @@ public class Runner {
 
     public void pathVerify(String file, String path) throws IOException {
         
-        maze2D.build(file);
-        log.info("Checking path" + path);
-        log.info("correct path");
+        log.info("Checking path from west entrence " + path);
 
+        maze2D.build(file);
+
+        coordinates = maze2D.returnWestEntrance();
+        exitCoord = maze2D.returnEastEntrance();
+
+        int wallsHit = 0;
+        boolean passedExit= false;
+
+        for(int i=0;i<path.length();i++){
+            switch(path.charAt(i)){
+                case 'F':
+                    if(wallCheck(moves.F)){
+                        wallsHit++;
+                    }
+                    move();
+                    log.info("Moved Forward");
+                    break;
+                case 'L':
+                    rotate(moves.L);
+                    log.info("Rotated Left");
+                    break;
+                case 'R':
+                    rotate(moves.R);
+                    log.info("Rotated Right");
+                    break;
+                default:
+                    log.info("Not a real move: Please put F,L or R");
+                    break;
+            }
+            if(Arrays.equals(coordinates,exitCoord)){
+                passedExit = true;
+            }
+            
+        }
+        if((wallsHit>0)&(passedExit==false)){
+            log.info("NOT a correct path! You miss the exit and hit "+wallsHit+" walls!");
+        }else if((wallsHit>0)&(passedExit==true)){
+            log.info("NOT a correct path! You went through "+wallsHit+" walls!");
+        }else if((wallsHit==0)&(passedExit==false)){
+            log.info("NOT a correct path! You didn't reach the exit");
+        }else{
+            log.info("Correct path");
+        }
     }
     private static String canonize(String path){
         return "";
