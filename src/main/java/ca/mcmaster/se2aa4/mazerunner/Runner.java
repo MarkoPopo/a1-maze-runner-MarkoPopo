@@ -44,7 +44,7 @@ public class Runner {
 
         while(coordinates != exitCoord){
             try {
-                String newMove = decideMove(previousMove);
+            String newMove = decideMove(previousMove);
 
             previousMove = newMove;
             pathTaken += newMove;
@@ -65,7 +65,7 @@ public class Runner {
                     log.info("Impossible move");
                     break;
             }
-            log.info(coordinates[0]+" "+coordinates[1]);
+            log.info("x="+coordinates[0]+" y="+coordinates[1]);
             log.info(facingDirection);
             } catch (Exception e) {
                 log.error("Left Maze!");
@@ -73,7 +73,7 @@ public class Runner {
             }
             
         }
-        log.info(pathTaken);
+        log.info(Translator.factorize(pathTaken));
     }
 
     public void pathVerify(String file, String path) throws IOException {
@@ -81,7 +81,7 @@ public class Runner {
         log.info("Checking path from west entrence " + path);
 
         maze2D.build(file);
-        path = canonize(path);
+        path = Translator.canonize(path);
         System.out.println(path);
 
         coordinates = maze2D.returnWestEntrance();
@@ -124,29 +124,6 @@ public class Runner {
         }else{
             log.info("Correct path");
         }
-    }
-    private static String canonize(String path){
-        
-        String canonized = "";
-
-        for(int i = 0;i<path.length();i++){
-            if(Character.isDigit(path.charAt(i))){      //If it's a number
-                char duplicant = path.charAt(i+1);      //Get the next char
-                int reps = Character.getNumericValue(path.charAt(i)) -1 ;
-                log.error("reps = "+reps);
-
-                for(int j = 0;j < reps;j++){                 //Add it to the path i times
-                    canonized+=duplicant;
-                }
-            }else if(Character.isAlphabetic(path.charAt(i))){
-                char duplicant = path.charAt(i);
-                canonized += duplicant;
-            }
-        }
-        return canonized;
-    }
-    private static String factorize(String path){
-        return "";
     }
 
     private String decideMove(String previousMove){
