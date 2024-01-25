@@ -3,6 +3,7 @@ package ca.mcmaster.se2aa4.mazerunner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class Runner {
     int[] coordinates = {0,0};
     dir facingDirection = dir.East;
 
-    public List<List<Character>> maze2D = new ArrayList<List<Character>>();
+    public Maze maze2D = new Maze();
 
     enum dir{
         North,
@@ -27,22 +28,16 @@ public class Runner {
 
     private static final Logger log = LogManager.getLogger();
 
-    public void explore(List<List<Character>> rowsList) {
-        maze2D = rowsList;
+    public void explore(String file) throws IOException {
+        
+        maze2D.build(file);
         String pathTaken = "";
-        int exitCoord = rowsList.get(0).size();
+        int[] exitCoord = maze2D.returnEastEntrance();
 
         log.info("Exploring Maze");
 
-        log.info("Looking for West entrance");
-        for(int i = 0;i<rowsList.size();i++){
-            if (rowsList.get(i).get(0).equals(' ')){
-                coordinates[1] = i;
-                log.info("Found entrance at y = "+i);
-            }
-        }
         String previousMove = "";
-        while(coordinates[0] != exitCoord){
+        while(coordinates != exitCoord){
             try {
                 String newMove = decideMove(previousMove);
 
@@ -76,11 +71,12 @@ public class Runner {
         log.info(pathTaken);
     }
 
-    public void pathVerify(List<List<Character>> rowsList, String path) {
-        maze2D = rowsList;
+    public void pathVerify(String file, String path) throws IOException {
+        
+        maze2D.build(file);
         log.info("Checking path" + path);
         log.info("correct path");
-        
+
     }
     private static String canonize(String path){
         return "";
@@ -130,7 +126,7 @@ public class Runner {
         newCoords[1] = coordinates[1] + movement[1];
 
         //Return if the viewed location is a wall
-        return maze2D.get(newCoords[1]).get(newCoords[0]).equals('#');
+        return maze2D.rowsList.get(newCoords[1]).get(newCoords[0]).equals('#');
     }
 
     private dir calculateDirection(moves move){
