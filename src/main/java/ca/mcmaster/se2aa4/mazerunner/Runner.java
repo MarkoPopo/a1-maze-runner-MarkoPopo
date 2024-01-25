@@ -31,7 +31,9 @@ public class Runner {
     public void explore(String file) throws IOException {
         
         maze2D.build(file);
+        maze2D.debugprintMaze();
         String pathTaken = "";
+        coordinates = maze2D.returnWestEntrance();
         int[] exitCoord = maze2D.returnEastEntrance();
 
         log.info("Exploring Maze");
