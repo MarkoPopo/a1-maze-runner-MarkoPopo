@@ -17,7 +17,7 @@ public class Main {
 
         logger.info("** Starting Maze runner");
         
-        Maze maze = new Maze();
+        Runner runner = new Runner();
         String file = args[0];
         String mode = "explore";
         String path = "";
@@ -35,9 +35,9 @@ public class Main {
         }
 
         if(mode.equals("explore")){
-            maze.explorePath(file);
+            runner.explore(file);
         }else{
-            maze.checkPath(file, path);
+            runner.pathVerify(file, path);
         }
     }
 }
