@@ -23,7 +23,6 @@ public class Maze {
 
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String line;
-        int mazeWidth = 0;
 
         while ((line = reader.readLine()) != null) {
 
@@ -38,6 +37,12 @@ public class Maze {
                     log.info("PASS ");
                 }
             }
+            if(rowsList.size()>0){
+                while(row.size()<mazeWidth()){//If the row ends, fill it up with space characters
+                    row.add(' ');
+                }
+            }
+
             rowsList.add(row);
             System.out.print(System.lineSeparator());
         }
