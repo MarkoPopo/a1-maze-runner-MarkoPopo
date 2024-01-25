@@ -80,6 +80,7 @@ public class Runner {
         maze2D = rowsList;
         log.info("Checking path" + path);
         log.info("correct path");
+        
     }
     private static String canonize(String path){
         return "";
