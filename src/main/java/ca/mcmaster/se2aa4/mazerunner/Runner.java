@@ -81,6 +81,8 @@ public class Runner {
         log.info("Checking path from west entrence " + path);
 
         maze2D.build(file);
+        path = canonize(path);
+        System.out.println(path);
 
         coordinates = maze2D.returnWestEntrance();
         exitCoord = maze2D.returnEastEntrance();
@@ -112,7 +114,6 @@ public class Runner {
             if(Arrays.equals(coordinates,exitCoord)){
                 passedExit = true;
             }
-            
         }
         if((wallsHit>0)&(passedExit==false)){
             log.info("NOT a correct path! You miss the exit and hit "+wallsHit+" walls!");
@@ -125,7 +126,24 @@ public class Runner {
         }
     }
     private static String canonize(String path){
-        return "";
+        
+        String canonized = "";
+
+        for(int i = 0;i<path.length();i++){
+            if(Character.isDigit(path.charAt(i))){      //If it's a number
+                char duplicant = path.charAt(i+1);      //Get the next char
+                int reps = Character.getNumericValue(path.charAt(i)) -1 ;
+                log.error("reps = "+reps);
+
+                for(int j = 0;j < reps;j++){                 //Add it to the path i times
+                    canonized+=duplicant;
+                }
+            }else if(Character.isAlphabetic(path.charAt(i))){
+                char duplicant = path.charAt(i);
+                canonized += duplicant;
+            }
+        }
+        return canonized;
     }
     private static String factorize(String path){
         return "";
