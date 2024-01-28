@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.File;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,9 +43,10 @@ public class Maze {             //Class that builds and stores the maze as chara
 
             rowsList.add(row);
         }
+        reader.close();
     }
 
-    public void debugprintMaze(){ //Quickly print the 2D array maze
+    public void debugprintMaze(){                        //Quickly print the 2D array maze
         for(int i = 0;i<rowsList.size();i++){
             for(int j = 0;j<rowsList.get(i).size();j++){
                 System.out.print(rowsList.get(i).get(j));
