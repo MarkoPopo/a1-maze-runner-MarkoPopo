@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Runner implements Navigation{                  //The class that travels through the maze
+public class Runner implements Navigation{                      //The class that travels through the maze with the right hand rule
 
     int[] coordinates = {0,0};
     dir facingDirection = dir.East;
@@ -18,7 +18,7 @@ public class Runner implements Navigation{                  //The class that tra
 
     private static final Logger log = LogManager.getLogger();
 
-    public void explore(String file) throws IOException {       //Explore using the right hand rule to solve the maze
+    public void explore(String file) throws IOException {
         
         log.info("Exploring Maze");
 
@@ -30,8 +30,7 @@ public class Runner implements Navigation{                  //The class that tra
         String pathTaken = "";
         String previousMove = "";
 
-        while(coordinates != exitCoord){                        //until you reach the exit,
-            try {
+        while(!Arrays.equals(coordinates, exitCoord)){                        //until you reach the exit,
             String newMove = decideMove(previousMove);          //Decide on a move and perform it
 
             previousMove = newMove;
@@ -53,12 +52,10 @@ public class Runner implements Navigation{                  //The class that tra
                     log.info("Impossible move");
                     break;
             }
+
             log.info("x="+coordinates[0]+" y="+coordinates[1]);
+            log.info("ex="+exitCoord[0]+" ey="+exitCoord[1]);
             log.info(facingDirection);
-            } catch (Exception e) {                             
-                log.error("Left Maze!");
-                break;
-            }
             
         }
         log.info(Translator.factorize(pathTaken));
@@ -98,6 +95,10 @@ public class Runner implements Navigation{                  //The class that tra
                 default:
                     log.info("Not a real move: Please put F,L or R");
                     break;
+            }
+            if(!scanner.isInMaze(coordinates)){                                     //Check if it's still in the maze bounds
+                log.info("Left maze bounds.");
+                break;
             }
             if(Arrays.equals(coordinates,exitCoord)){                               //If it reaches the exit at some point
                 passedExit = true;

@@ -2,7 +2,7 @@ package ca.mcmaster.se2aa4.mazerunner;
 
 import ca.mcmaster.se2aa4.mazerunner.Navigation.moves;
 
-public class ScanMaze implements Navigation{
+public class ScanMaze implements Navigation{    //Class to get information about the maze (Eg. height, width, entrance location, wall)
 
     Maze maze2D;
 
@@ -17,8 +17,24 @@ public class ScanMaze implements Navigation{
         newCoords[1] = coordinates[1] + movement[1];
 
         //Return if the viewed location is a wall
-        return maze2D.rowsList.get(newCoords[1]).get(newCoords[0]).equals('#');
+        try {
+            return maze2D.rowsList.get(newCoords[1]).get(newCoords[0]).equals('#');
+        } catch (Exception e) {
+            return false;               //If out of bounds, return no wall
+        }
+        
     }
+
+    public boolean isInMaze(int[] coords){
+        if(coords[0]<0||coords[0]>=mazeWidth()){
+            return false;
+        }else if(coords[1]<0||coords[1]>=mazeHeight()){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     public int[] returnWestEntrance(){
         int[] coords = {0,0};
         for(int i = 0;i<maze2D.rowsList.size();i++){
@@ -40,5 +56,8 @@ public class ScanMaze implements Navigation{
     }
     public int mazeWidth(){
         return maze2D.rowsList.get(0).size();
+    }
+    public int mazeHeight(){
+        return maze2D.rowsList.size();
     }
 }
