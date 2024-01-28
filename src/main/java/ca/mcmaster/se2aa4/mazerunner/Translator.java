@@ -1,21 +1,30 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
 public class Translator {
-    public static String canonize(String path){
+    public static String canonize(String path){         //Factor to canonical form
         
         String canonized = "";
+        String repString = "";
 
-        for(int i = 0;i<path.length();i++){
-            if(Character.isDigit(path.charAt(i))){          //If it's a number
-                char duplicant = path.charAt(i+1);          //Get the next char
-                int reps = Character.getNumericValue(path.charAt(i)) -1 ;
+        for(int i = 0;i<path.length();i++){                 
+            if(Character.isDigit(path.charAt(i))){              //add digits to a buffer (repString)
+                repString += path.charAt(i);       
 
-                for(int j = 0;j < reps;j++){                //Add it to the output repeated that many times
-                    canonized+=duplicant;
+            }else if(Character.isAlphabetic(path.charAt(i))){   //Until it is an alphabetical character
+                int reps = 1;
+                try {
+                    reps = Integer.valueOf(repString);          //add that character (reps) many times
+                } catch (Exception e) {
+                    reps = 1;
                 }
-            }else if(Character.isAlphabetic(path.charAt(i))){
-                char duplicant = path.charAt(i);            //If it's just a character, add it once
-                canonized += duplicant;
+                
+                char duplicant = path.charAt(i); 
+                
+                for(int j = 0;j<reps;j++){
+                    canonized += duplicant;
+                }           
+                
+                repString = "";
             }
         }
         return canonized;
@@ -30,7 +39,7 @@ public class Translator {
             if(path.charAt(i)==prevChar){                   //If it's the same as its previous, increase the current counter
                 count++;
             }else{                                          //If not, combine the character with the number
-                if(count>1){                                //For readability's sake, add when needed spaces and don't include 1s
+                if(count>1){                                //For readability's sake, add spaces when needed and don't include 1s
                     factorized += ' ';
                     factorized += Integer.toString(count);
                     factorized += prevChar;

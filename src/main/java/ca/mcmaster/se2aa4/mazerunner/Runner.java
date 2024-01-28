@@ -38,36 +38,31 @@ public class Runner implements Navigation{                      //The class that
             switch(newMove){
                 case "F":
                     move();
-                    log.info("Moved Forward");
                     break;
                 case "L":
                     rotate(moves.L);
-                    log.info("Rotated Left");
                     break;
                 case "R":
                     rotate(moves.R);
-                    log.info("Rotated Right");
                     break;
                 default:
                     log.info("Impossible move");
                     break;
             }
 
-            log.info("x="+coordinates[0]+" y="+coordinates[1]);
-            log.info("ex="+exitCoord[0]+" ey="+exitCoord[1]);
-            log.info(facingDirection);
+            //log.info("x="+coordinates[0]+" y="+coordinates[1]);
+            //log.info(facingDirection);
             
         }
         log.info(Translator.factorize(pathTaken));
     }
 
-    public void pathVerify(String file, String path) throws IOException {       //Tries the inputted path by the user
+    public void pathVerify(String file, String path,dir direction) throws IOException {       //Tries the inputted path by the user
         
-        log.info("Checking path from west entrence " + path);
+        log.info("Checking path from west entrence ");
 
         maze2D.build(file);
         path = Translator.canonize(path);                                           //Translate to canonical form
-        System.out.println(path);
 
         coordinates = scanner.returnWestEntrance();
         int[] exitCoord = scanner.returnEastEntrance();
@@ -82,20 +77,20 @@ public class Runner implements Navigation{                      //The class that
                         wallsHit++; 
                     }
                     move();
-                    log.info("Moved Forward");
                     break;
                 case 'L':
                     rotate(moves.L);
-                    log.info("Rotated Left");
                     break;
                 case 'R':
                     rotate(moves.R);
-                    log.info("Rotated Right");
                     break;
                 default:
                     log.info("Not a real move: Please put F,L or R");
                     break;
             }
+
+            //log.info("x="+coordinates[0]+" y="+coordinates[1]);
+
             if(!scanner.isInMaze(coordinates)){                                     //Check if it's still in the maze bounds
                 log.info("Left maze bounds.");
                 break;

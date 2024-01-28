@@ -43,7 +43,6 @@ public class Maze {             //Class that builds and stores the maze as chara
             }
 
             rowsList.add(row);
-            System.out.print(System.lineSeparator());
         }
     }
 
