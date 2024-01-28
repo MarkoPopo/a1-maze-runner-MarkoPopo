@@ -30,15 +30,9 @@ public class Maze {
 
             for (int idx = 0; idx < line.length(); idx++) {
                 row.add(line.charAt(idx));
-                
-                if (line.charAt(idx) == '#') {
-                    log.info("WALL ");
-                } else if (line.charAt(idx) == ' ') {
-                    log.info("PASS ");
-                }
             }
             if(rowsList.size()>0){
-                while(row.size()<mazeWidth()){//If the row ends, fill it up with space characters
+                while(row.size()<mazeWidth()){          //If the row ends, fill it up with space characters
                     row.add(' ');
                 }
             }

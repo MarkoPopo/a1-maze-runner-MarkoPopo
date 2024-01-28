@@ -8,31 +8,30 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Runner implements Navigation{
+public class Runner implements Navigation{                  //The class that travels through the maze
 
     int[] coordinates = {0,0};
-    int[] exitCoord ={0,0};
     dir facingDirection = dir.East;
 
     public Maze maze2D = new Maze();
 
     private static final Logger log = LogManager.getLogger();
 
-    public void explore(String file) throws IOException {
+    public void explore(String file) throws IOException {       //Explore using the right hand rule to solve the maze
         
         log.info("Exploring Maze");
 
         maze2D.build(file);
         
         coordinates = maze2D.returnWestEntrance();
-        exitCoord = maze2D.returnEastEntrance();
+        int[] exitCoord = maze2D.returnEastEntrance();
 
         String pathTaken = "";
         String previousMove = "";
 
-        while(coordinates != exitCoord){
+        while(coordinates != exitCoord){                        //until you reach the exit,
             try {
-            String newMove = decideMove(previousMove);
+            String newMove = decideMove(previousMove);          //Decide on a move and perform it
 
             previousMove = newMove;
             pathTaken += newMove;
@@ -55,7 +54,7 @@ public class Runner implements Navigation{
             }
             log.info("x="+coordinates[0]+" y="+coordinates[1]);
             log.info(facingDirection);
-            } catch (Exception e) {
+            } catch (Exception e) {                             
                 log.error("Left Maze!");
                 break;
             }
@@ -64,25 +63,25 @@ public class Runner implements Navigation{
         log.info(Translator.factorize(pathTaken));
     }
 
-    public void pathVerify(String file, String path) throws IOException {
+    public void pathVerify(String file, String path) throws IOException {       //Tries the inputted path by the user
         
         log.info("Checking path from west entrence " + path);
 
         maze2D.build(file);
-        path = Translator.canonize(path);
+        path = Translator.canonize(path);                                           //Translate to canonical form
         System.out.println(path);
 
         coordinates = maze2D.returnWestEntrance();
-        exitCoord = maze2D.returnEastEntrance();
+        int[] exitCoord = maze2D.returnEastEntrance();
 
         int wallsHit = 0;
         boolean passedExit= false;
 
-        for(int i=0;i<path.length();i++){
+        for(int i=0;i<path.length();i++){                                           //For each character, 
             switch(path.charAt(i)){
                 case 'F':
-                    if(wallCheck(moves.F)){
-                        wallsHit++;
+                    if(wallCheck(moves.F)){                                         //If you move into a wall, count the wall
+                        wallsHit++; 
                     }
                     move();
                     log.info("Moved Forward");
@@ -99,11 +98,11 @@ public class Runner implements Navigation{
                     log.info("Not a real move: Please put F,L or R");
                     break;
             }
-            if(Arrays.equals(coordinates,exitCoord)){
+            if(Arrays.equals(coordinates,exitCoord)){                               //If it reaches the exit at some point
                 passedExit = true;
             }
         }
-        if((wallsHit>0)&(passedExit==false)){
+        if((wallsHit>0)&(passedExit==false)){                                 //Display a message that tells what the user did right/wrong
             log.info("NOT a correct path! You miss the exit and hit "+wallsHit+" walls!");
         }else if((wallsHit>0)&(passedExit==true)){
             log.info("NOT a correct path! You went through "+wallsHit+" walls!");
@@ -114,29 +113,28 @@ public class Runner implements Navigation{
         }
     }
 
-    private String decideMove(String previousMove){
-        if(wallCheck(moves.R)){ //Wall to your right
-            if(wallCheck(moves.F)){ //Wall in front
-                return "L";
-            }else{//No wall in front
-                return "F";
+    private String decideMove(String previousMove){                           //Right hand algorithm implementation
+        if(wallCheck(moves.R)){                 
+            if(wallCheck(moves.F)){             
+                return "L";                     //Turn Left if there's walls to the right and front
+            }else{                              
+                return "F";                     //Forward if there's no wall in front
             }
-        }else{//No wall on right
-            log.error("no wall on right");
-            if(wallCheck(moves.F)){//Wall in front
-                return "R";
-            }else{//No wall in front
-                if(previousMove.equals("R")||previousMove.equals("")){//we just turned right or just started
-                    return "F";
-                }else{//we came to a right corner
-                    return "R";
+        }else{                                 
+            if(wallCheck(moves.F)){
+                return "R";                     //Right if wall in front but none to the right
+            }else{
+                if(previousMove.equals("R")||previousMove.equals("")){
+                    return "F";                 //We must have turned the corner already, so go forward
+                }else{                          
+                    return "R";                 //We just ran into a right corner, so turn right
                 }
             }
         }
     }
 
     private void move(){
-        int[] movement = dirInt(calculateDirection(moves.F));
+        int[] movement = Compass.dirInt(moves.F, facingDirection);
         int[] newCoords = {0,0};
         newCoords[0] = coordinates[0] + movement[0];
         newCoords[1] = coordinates[1] + movement[1];
@@ -145,11 +143,12 @@ public class Runner implements Navigation{
     }
 
     private void rotate(moves move){
-        facingDirection = calculateDirection(move);
+        facingDirection = Compass.calculateDirection(move, facingDirection);
     }
 
     private boolean wallCheck(moves move){
-        int[] movement = dirInt(calculateDirection(move));
+        Compass compass = new Compass();
+        int[] movement = Compass.dirInt(move, facingDirection);
         int[] newCoords = {0,0};
         newCoords[0] = coordinates[0] + movement[0];
         newCoords[1] = coordinates[1] + movement[1];
@@ -158,66 +157,5 @@ public class Runner implements Navigation{
         return maze2D.rowsList.get(newCoords[1]).get(newCoords[0]).equals('#');
     }
 
-    private dir calculateDirection(moves move){
-        dir direction = facingDirection;
-        if(move == moves.R){
-            switch(direction){
-                case North:
-                    direction = dir.East;
-                    break;
-                case West:
-                    direction = dir.North;
-                    break;
-                case South:
-                    direction = dir.West;
-                    break;
-                case East:
-                    direction = dir.South;
-                    break;
-                default:
-                    log.error("invalid direction R");
-                    break;
-            }
-        }else if(move == moves.L){
-            switch(direction){
-                case North:
-                    direction = dir.West;
-                    break;
-                case West:
-                    direction = dir.South;
-                    break;
-                case South:
-                    direction = dir.East;
-                    break;
-                case East:
-                    direction = dir.North;
-                    break;
-                default:
-                    log.error("invalid direction L");
-                    break;
-            }
-        }
-        return direction;
-    }
-    private int[] dirInt(dir direction){
-        int[] dirInt = {0,0};
-        switch(direction){
-            case North:
-                dirInt[1] = -1;
-                break;
-            case West:
-                dirInt[0] = -1;
-                break;
-            case South:
-                dirInt[1] = 1;
-                break;
-            case East:
-                dirInt[0] = 1;
-                break;
-            default:
-                log.error("invalid direction int[]");
-                break;
-        }
-        return dirInt;
-    }
+    
 }
