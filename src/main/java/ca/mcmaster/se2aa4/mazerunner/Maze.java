@@ -10,7 +10,9 @@ import java.io.File;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
 public class Maze {             //Class that builds and stores the maze as characters
+    
 
     public List<List<Character>> rowsList = new ArrayList<List<Character>>();  
     
