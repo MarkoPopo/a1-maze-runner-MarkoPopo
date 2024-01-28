@@ -4,9 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Runner implements Navigation{                      //The class that travels through the maze with the right hand rule
 
@@ -48,32 +46,44 @@ public class Runner implements Navigation{                      //The class that
                 default:
                     log.info("Impossible move");
                     break;
-            }
-
-            //log.info("x="+coordinates[0]+" y="+coordinates[1]);
-            //log.info(facingDirection);
-            
+            }            
         }
         log.info(Translator.factorize(pathTaken));
     }
 
-    public void pathVerify(String file, String path,dir direction) throws IOException {       //Tries the inputted path by the user
-        
-        log.info("Checking path from west entrence ");
-
+    public void bothWaysVerify(String file, String path) throws IOException{
         maze2D.build(file);
-        path = Translator.canonize(path);                                           //Translate to canonical form
 
-        coordinates = scanner.returnWestEntrance();
-        int[] exitCoord = scanner.returnEastEntrance();
+        pathVerify(file, path, dir.East);
+        pathVerify(file, path, dir.West);
+    }
 
+    private void pathVerify(String file, String path,dir direction) throws IOException {       //Tries the inputted path by the user
+        
+        path = Translator.canonize(path);                                                   //Translate to canonical form
+
+        facingDirection = direction;
+        int[] exitCoord = {0,0};
+
+        if(direction == dir.East){
+            log.info("Checking path from WEST entrance towards EAST exit");
+
+            coordinates = scanner.returnWestEntrance();
+            exitCoord = scanner.returnEastEntrance();
+        }else{
+            log.info("Checking path from EAST entrance towards WEST exit");
+
+            coordinates = scanner.returnEastEntrance();
+            exitCoord = scanner.returnWestEntrance();
+        }
+        
         int wallsHit = 0;
         boolean passedExit= false;
 
         for(int i=0;i<path.length();i++){                                           //For each character, 
             switch(path.charAt(i)){
                 case 'F':
-                    if(scanner.wallCheck(moves.F, coordinates, facingDirection)){                                         //If you move into a wall, count the wall
+                    if(scanner.wallCheck(moves.F, coordinates, facingDirection)){   //If you move into a wall, count the wall
                         wallsHit++; 
                     }
                     move();
@@ -88,8 +98,6 @@ public class Runner implements Navigation{                      //The class that
                     log.info("Not a real move: Please put F,L or R");
                     break;
             }
-
-            //log.info("x="+coordinates[0]+" y="+coordinates[1]);
 
             if(!scanner.isInMaze(coordinates)){                                     //Check if it's still in the maze bounds
                 log.info("Left maze bounds.");

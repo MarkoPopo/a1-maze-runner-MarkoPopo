@@ -8,7 +8,7 @@ import org.apache.commons.cli.*;
 
 public class Main implements Navigation{
     //mvn clean package
-    //java -jar target/mazerunner.jar ./examples/direct.maz.txt
+    //java -jar target/mazerunner.jar -i ./examples/direct.maz.txt
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -46,7 +46,7 @@ public class Main implements Navigation{
         if(mode.equals("explore")){
             runner.explore(file);
         }else if(mode.equals(("verify"))){
-            runner.pathVerify(file, path, dir.East);
+            runner.bothWaysVerify(file, path);
         }
     }
 }
