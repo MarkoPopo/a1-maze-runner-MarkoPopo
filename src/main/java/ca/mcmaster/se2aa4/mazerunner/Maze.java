@@ -15,24 +15,27 @@ public class Maze {
     public List<List<Character>> rowsList = new ArrayList<List<Character>>();  
     
     public void build(String file) throws IOException{
-        final Logger log = LogManager.getLogger();
 
-        //Takes the file and builds a 2D array
+        int initialWidth = 0;
+        final Logger log = LogManager.getLogger();
 
         log.info("**** Reading the maze from file " + file);
 
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String line;
 
-        while ((line = reader.readLine()) != null) {
+        while ((line = reader.readLine()) != null) {    //Takes the file and builds a 2D array
 
-            List<Character> row = new ArrayList<Character>(); //Create row
+            List<Character> row = new ArrayList<Character>();
 
             for (int idx = 0; idx < line.length(); idx++) {
                 row.add(line.charAt(idx));
             }
+            if(rowsList.size()==0){                      //If it's the first row, set that as the initial width
+                initialWidth = row.size();
+            }
             if(rowsList.size()>0){
-                while(row.size()<mazeWidth()){          //If the row ends, fill it up with space characters
+                while(row.size()<initialWidth){          //If the row ends, fill it up with space characters
                     row.add(' ');
                 }
             }
@@ -49,28 +52,5 @@ public class Maze {
             }
             System.out.println("");
         }
-    }
-
-    public int[] returnWestEntrance(){
-        int[] coords = {0,0};
-        for(int i = 0;i<rowsList.size();i++){
-            if (rowsList.get(i).get(0).equals(' ')){
-                coords[1] = i;
-            }
-        }
-        return coords;
-    }
-    public int[] returnEastEntrance(){
-        int[] coords = {0,0};
-        coords[0] = mazeWidth()-1;
-        for(int i = 0;i<rowsList.size();i++){
-            if (rowsList.get(i).get(mazeWidth()-1).equals(' ')){
-                coords[1] = i;
-            }
-        }
-        return coords;
-    }
-    public int mazeWidth(){
-        return rowsList.get(0).size();
     }
 }

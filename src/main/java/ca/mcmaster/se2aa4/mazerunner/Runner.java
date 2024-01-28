@@ -14,6 +14,7 @@ public class Runner implements Navigation{                  //The class that tra
     dir facingDirection = dir.East;
 
     public Maze maze2D = new Maze();
+    ScanMaze scanner = new ScanMaze(maze2D);
 
     private static final Logger log = LogManager.getLogger();
 
@@ -23,8 +24,8 @@ public class Runner implements Navigation{                  //The class that tra
 
         maze2D.build(file);
         
-        coordinates = maze2D.returnWestEntrance();
-        int[] exitCoord = maze2D.returnEastEntrance();
+        coordinates = scanner.returnWestEntrance();
+        int[] exitCoord = scanner.returnEastEntrance();
 
         String pathTaken = "";
         String previousMove = "";
@@ -71,8 +72,8 @@ public class Runner implements Navigation{                  //The class that tra
         path = Translator.canonize(path);                                           //Translate to canonical form
         System.out.println(path);
 
-        coordinates = maze2D.returnWestEntrance();
-        int[] exitCoord = maze2D.returnEastEntrance();
+        coordinates = scanner.returnWestEntrance();
+        int[] exitCoord = scanner.returnEastEntrance();
 
         int wallsHit = 0;
         boolean passedExit= false;
@@ -80,7 +81,7 @@ public class Runner implements Navigation{                  //The class that tra
         for(int i=0;i<path.length();i++){                                           //For each character, 
             switch(path.charAt(i)){
                 case 'F':
-                    if(wallCheck(moves.F)){                                         //If you move into a wall, count the wall
+                    if(scanner.wallCheck(moves.F, coordinates, facingDirection)){                                         //If you move into a wall, count the wall
                         wallsHit++; 
                     }
                     move();
@@ -113,26 +114,6 @@ public class Runner implements Navigation{                  //The class that tra
         }
     }
 
-    private String decideMove(String previousMove){                           //Right hand algorithm implementation
-        if(wallCheck(moves.R)){                 
-            if(wallCheck(moves.F)){             
-                return "L";                     //Turn Left if there's walls to the right and front
-            }else{                              
-                return "F";                     //Forward if there's no wall in front
-            }
-        }else{                                 
-            if(wallCheck(moves.F)){
-                return "R";                     //Right if wall in front but none to the right
-            }else{
-                if(previousMove.equals("R")||previousMove.equals("")){
-                    return "F";                 //We must have turned the corner already, so go forward
-                }else{                          
-                    return "R";                 //We just ran into a right corner, so turn right
-                }
-            }
-        }
-    }
-
     private void move(){
         int[] movement = Compass.dirInt(moves.F, facingDirection);
         int[] newCoords = {0,0};
@@ -146,16 +127,23 @@ public class Runner implements Navigation{                  //The class that tra
         facingDirection = Compass.calculateDirection(move, facingDirection);
     }
 
-    private boolean wallCheck(moves move){
-        Compass compass = new Compass();
-        int[] movement = Compass.dirInt(move, facingDirection);
-        int[] newCoords = {0,0};
-        newCoords[0] = coordinates[0] + movement[0];
-        newCoords[1] = coordinates[1] + movement[1];
-
-        //Return if the viewed location is a wall
-        return maze2D.rowsList.get(newCoords[1]).get(newCoords[0]).equals('#');
+    private String decideMove(String previousMove){                           //Right hand algorithm implementation
+        if(scanner.wallCheck(moves.R,coordinates,facingDirection)){                 
+            if(scanner.wallCheck(moves.F,coordinates,facingDirection)){             
+                return "L";                     //Turn Left if there's walls to the right and front
+            }else{                              
+                return "F";                     //Forward if there's no wall in front
+            }
+        }else{                                 
+            if(scanner.wallCheck(moves.F,coordinates,facingDirection)){
+                return "R";                     //Right if wall in front but none to the right
+            }else{
+                if(previousMove.equals("R")||previousMove.equals("")){
+                    return "F";                 //We must have turned the corner already, so go forward
+                }else{                          
+                    return "R";                 //We just ran into a right corner, so turn right
+                }
+            }
+        }
     }
-
-    
 }
