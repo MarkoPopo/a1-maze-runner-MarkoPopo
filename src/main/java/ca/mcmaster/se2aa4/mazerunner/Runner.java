@@ -8,25 +8,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Runner {
+public class Runner implements Navigation{
 
     int[] coordinates = {0,0};
     int[] exitCoord ={0,0};
     dir facingDirection = dir.East;
 
     public Maze maze2D = new Maze();
-
-    enum dir{
-        North,
-        West,
-        South,
-        East
-    }
-    enum moves{
-        F,
-        L,
-        R
-    }
 
     private static final Logger log = LogManager.getLogger();
 
