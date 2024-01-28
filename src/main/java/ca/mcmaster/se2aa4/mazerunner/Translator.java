@@ -7,7 +7,7 @@ public class Translator {
         String repString = "";
 
         for(int i = 0;i<path.length();i++){                 
-            if(Character.isDigit(path.charAt(i))){              //add digits to a buffer (repString)
+            if(Character.isDigit(path.charAt(i))){              //add digits to a string buffer
                 repString += path.charAt(i);       
 
             }else if(Character.isAlphabetic(path.charAt(i))){   //Until it is an alphabetical character
