@@ -1,6 +1,7 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-public class Translator {
+public class Translator implements Navigation{
+
     public static String canonize(String path){         //Factor to canonical form
         
         String canonized = "";
@@ -29,7 +30,8 @@ public class Translator {
         }
         return canonized;
     }
-    public static String factorize(String path){
+    
+    public static String factorize(String path){            //Canonical to factorized
         path += ' ';
         String factorized = "";
         char prevChar = ' ';
