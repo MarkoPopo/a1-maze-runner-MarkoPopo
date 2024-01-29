@@ -1,6 +1,6 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-public class ScanMaze implements Navigation, scan{    //Class to get information about the maze (Eg. height, width, entrance location, wall)
+public class ScanMaze implements Navigation{    //Class to get information about the maze (Eg. height, width, entrance location, wall)
 
     Maze maze2D;
 
@@ -8,7 +8,6 @@ public class ScanMaze implements Navigation, scan{    //Class to get information
         maze2D = maze;
     }
     
-    @Override
     public boolean wallCheck(moves move, int[] coordinates, dir facingDirection){   //Check if a position in the maze is a wall or not
         int[] movement = Compass.dirInt(move, facingDirection);
         int[] newCoords = {0,0};
@@ -23,7 +22,6 @@ public class ScanMaze implements Navigation, scan{    //Class to get information
         
     }
 
-    @Override
     public boolean isInMaze(int[] coords){      //Check if location in maze is in bounds
         if(coords[0]<0||coords[0]>=mazeWidth()){
             return false;
